@@ -857,6 +857,6 @@ section #footer .credits.right {
 
 #game_wrapper {
   text-align: center;
-  margin-left: 375px;
+  margin-left: -375px;
   width: 1401px;
 }
