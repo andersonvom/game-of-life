@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Conway's Game of Life by andersonvom</title>
+    <title>Conway's Game of Life</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -16,6 +16,10 @@
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+    <meta name="author" content="andersonvom" />
+    <meta name="description" content="Processing.js implementation of Conway's Game of Life" />
+    <meta name="keywords" content="conway, game, life, processing.js, javascript, canvas, html5" />
+    <link rel="icon" type="image/png" href="https://raw.github.com/andersonvom/game-of-life/master/glider.png">
   </head>
   <body>
       <div id="header">
@@ -33,9 +37,175 @@
         <div id="title">
           <h1>Conway's Game of Life</h1>
           <p>A Javascript implementation of Conway's Game of Life</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/andersonvom">andersonvom</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+michigangraham">mattgraham</a></span>
+        </div>
+
+        <script type="text/processing" data-processing-target="game">
+spacing = 0;
+tile_width = 8;
+length = tile_width + spacing;
+num_tiles = [100, 75];
+canvas_size = [ num_tiles[0]*length+spacing+1, num_tiles[1]*length+spacing+1 ];
+background_color = 200;
+mouse_start_col = 0;
+mouse_start_row = 0;
+start_status = false;
+board = new Board();
+
+void setup()
+{
+  size(canvas_size[0], canvas_size[1]);
+  fill(255);
+  stroke(background_color);
+  background(background_color);
+  board.init(num_tiles[0],num_tiles[1]);
+  
+  decode_hash();
+    
+  window.addEventListener("hashchange", decode_hash, false);
+}
+
+void decode_hash()
+{
+  board.rle_decode(getBoardEncoding());
+}
+
+void reset_board(columns, rows)
+{
+  num_tiles = [columns, rows];
+  canvas_size = [ num_tiles[0]*length+spacing+1, num_tiles[1]*length+spacing+1 ];
+  setup();
+}
+
+void draw()
+{
+  var changed_positions = board.get_changed_cells(true);
+  if (changed_positions.length > 0)
+  {
+    for (var i=0; i<changed_positions.length; i++) {
+      var pos = changed_positions[i];
+      draw_cell(pos[0], pos[1]);
+    }
+  }
+}
+
+void draw_cell(row, col)
+{
+  var cells = board.get_cells();
+  var cell = cells[row][col];
+  
+  if (cell.is_alive()) fill(100,170,20);
+  else fill(255);
+  
+  x_position = length*col + spacing;
+  y_position = length*row + spacing;
+  rect(x_position, y_position, tile_width, tile_width);
+}
+
+void mouseClicked()
+{
+  var row = (int)((mouseY - 1) / length);
+  var col = (int)((mouseX - 1) / length);
+  board.toggle_cell(row, col);
+  updateURL();
+}
+
+void mousePressed()
+{
+  var cells = board.get_cells();
+  mouse_start_row = (int)((mouseY - 1) / length);
+  mouse_start_col = (int)((mouseX - 1) / length);
+  start_status = cells[mouse_start_row][mouse_start_col].is_alive()
+}
+
+void mouseReleased()
+{
+  updateURL();
+}
+
+void mouseOut()
+{
+  updateURL();
+}
+
+void mouseDragged()
+{
+  var row = (int)((mouseY - 1) / length);
+  var col = (int)((mouseX - 1) / length);
+  var cells = board.get_cells();
+  if (!start_status) {
+    if (!cells[row][col].is_alive())
+      board.toggle_cell(row,col);
+  }
+  else {
+    if (cells[row][col].is_alive())
+      board.toggle_cell(row,col);
+  }
+}
+
+void keyPressed()
+{
+  if (key == 'r') {
+    rand();
+  }
+  else if (key == 'c') {
+    clear();
+  }
+  else if (key == 's') {
+    stop();
+  }
+  else if (key == 'p') {
+    play();
+  }
+  else if (key == 't') {
+    step();
+  }
+  else if (key == '+') {
+    speed(0.2);
+  }
+  else if (key == '-') {
+    speed(-0.2);
+  }
+}
+
+void updateURL()
+{
+  window.location.hash = board.rle_encode();
+}
+
+String getBoardEncoding()
+{
+  return window.location.hash.substring(1);
+}
+
+void rand()  { board.change_speed(0); board.fill_cells(); updateURL(); }
+void clear() { board.change_speed(0); board.fill_cells(0); updateURL(); }
+void stop()  { board.stop(); updateURL(); }
+void play()  { board.run(); }
+void step()  { board.step(); updateURL(); }
+void speed(spd) { board.change_speed(spd); }
+void center()  { board.center(); updateURL(); }          
+        </script>
+        
+        <div id="game_wrapper">
+        <canvas id="game">
+          <img src="https://raw.github.com/andersonvom/game-of-life/master/screenshot.png" />
+        </canvas>
+        <br />
+
+        <button id="step"   onclick="step();">Step (T)</button>
+        <button id="play"   onclick="play();">Play (P)</button>
+        <button id="stop"   onclick="stop();">Stop (S)</button>
+        <button id="random" onclick="rand();">Random (R)</button>
+        <button id="cls"    onclick="cls();">Clear (C)</button>
+        <button id="speed_up" onclick="speed(0.2);">Faster (+)</button>
+        <button id="speed_down" onclick="speed(-0.2);">Slower (-)</button>
+        <br />
+        <button id="small"  onclick="size(50,50);">Small (1)</button>
+        <button id="medium" onclick="size(100,75);">Medium (2)</button>
+        <button id="large"  onclick="size(175,90);">Large (3)</button>
+        <br />
+        <button id="center"  onclick="center();">Center</button>
         </div>
 
         <h3>Welcome to the Game of Life!</h3>
@@ -68,32 +238,45 @@
 <h4>Still Lifes</h4>
 
 <ul>
-<li><a href="#2o%242o!">Block</a></li>
-<li><a href="#bo%24obo%24obo%24bo!">Beehive</a></li>
-<li><a href="#b2o%24o2bo%24bobo%242bo!">Loaf</a></li>
-<li><a href="#2o%24obo%24bo!">Boat</a></li>
+<li><a href="#2o$2o!">Block</a></li>
+<li><a href="#bo$obo$obo$bo!">Beehive</a></li>
+<li><a href="#b2o$o2bo$bobo$2bo!">Loaf</a></li>
+<li><a href="#2o$obo$bo!">Boat</a></li>
 </ul><h4>Oscilators</h4>
 
 <ul>
-<li><a href="#bo%24bo%24bo!">Blinker</a></li>
-<li><a href="#%24b3o%243o!">Toad</a></li>
-<li><a href="#2o%242o%242b2o%242b2o!">Beacon</a></li>
-<li><a href="#%243b3o3b3o%24%24bo4bobo4bo%24bo4bobo4bo%24bo4bobo4bo%243b3o3b3o%24%243b3o3b3o%24bo4bobo4bo%24bo4bobo4bo%24bo4bobo4bo%24%243b3o3b3o!">Pulsar</a></li>
+<li><a href="#bo$bo$bo!">Blinker</a></li>
+<li><a href="#$b3o$3o!">Toad</a></li>
+<li><a href="#2o$2o$2b2o$2b2o!">Beacon</a></li>
+<li><a href="#$3b3o3b3o$$bo4bobo4bo$bo4bobo4bo$bo4bobo4bo$3b3o3b3o$$3b3o3b3o$bo4bobo4bo$bo4bobo4bo$bo4bobo4bo$$3b3o3b3o!">Pulsar</a></li>
 </ul><h4>Spaceships</h4>
 
 <ul>
-<li><a href="#bo%242bo%243o!">Glider</a></li>
-<li><a href="#%24b4o%24o3bo%244bo%24o2bo!">Lightweight Spaceship</a></li>
-<li><a href="#9bo12b%247bobo12b%246bobo13b%242o3bo2bo11b2o%242o4bobo11b2o%247bobo12b%249bo!">Queen Bee Shuttle</a></li>
-<li><a href="#12bo11b%2412bobo9b%2413bobo8b%2413bo2bo7b%2413bobo8b%2412bobo9b%2412bo11b%243bo20b%242bobo19b%24bo3bo18b%242b3o19b%242o3b2o17b%2417b2o3b2o%2419b3o2b%2418bo3bob%2419bobo2b%2420bo3b%2411bo12b%249bobo12b%248bobo13b%247bo2bo13b%248bobo13b%249bobo12b%2411bo!">Queen Bee Loop</a></li>
-<li><a href="#12bo16b%2412b2o14bo%2410bob2o5bobo4b2ob%245bo3bo3b3o2bo4bo5b%242o3bo2bo6bobo5b3o2bo%242o3bob2o6bo3bobobo5b%242o3bo10bobo7b2ob%245b2o14bo6bo%247bo12bobo6b%247bo12bobo6b%245b2o14bo6bo%242o3bo10bobo7b2ob%242o3bob2o6bo3bobobo5b%242o3bo2bo6bobo5b3o2bo%245bo3bo3b3o2bo4bo5b%2410bob2o5bobo4b2ob%2412b2o14bo%2412bo!">Dragon</a></li>
-<li><a href="#24bo%2422bobo%2412b2o6b2o12b2o%2411bo3bo4b2o12b2o%242o8bo5bo3b2o%242o8bo3bob2o4bobo%2410bo5bo7bo%2411bo3bo%2412b2o!">Gosper Glider Gun</a></li>
+<li><a href="#bo$2bo$3o!">Glider</a></li>
+<li><a href="#$b4o$o3bo$4bo$o2bo!">Lightweight Spaceship</a></li>
+<li><a href="#9bo12b$7bobo12b$6bobo13b$2o3bo2bo11b2o$2o4bobo11b2o$7bobo12b$9bo!">Queen Bee Shuttle</a></li>
+<li><a href="#12bo11b$12bobo9b$13bobo8b$13bo2bo7b$13bobo8b$12bobo9b$12bo11b$3bo20b$2bobo19b$bo3bo18b$2b3o19b$2o3b2o17b$17b2o3b2o$19b3o2b$18bo3bob$19bobo2b$20bo3b$11bo12b$9bobo12b$8bobo13b$7bo2bo13b$8bobo13b$9bobo12b$11bo!">Queen Bee Loop</a></li>
+<li><a href="#12bo16b$12b2o14bo$10bob2o5bobo4b2ob$5bo3bo3b3o2bo4bo5b$2o3bo2bo6bobo5b3o2bo$2o3bob2o6bo3bobobo5b$2o3bo10bobo7b2ob$5b2o14bo6bo$7bo12bobo6b$7bo12bobo6b$5b2o14bo6bo$2o3bo10bobo7b2ob$2o3bob2o6bo3bobobo5b$2o3bo2bo6bobo5b3o2bo$5bo3bo3b3o2bo4bo5b$10bob2o5bobo4b2ob$12b2o14bo$12bo!">Dragon</a></li>
+<li><a href="#24bo$22bobo$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o$2o8bo3bob2o4bobo$10bo5bo7bo$11bo3bo$12b2o!">Gosper Glider Gun</a></li>
 </ul><h4>Other Patterns</h4>
 
 <p><a href="http://www.conwaylife.com/wiki/">LifeWiki</a> has tons of other patterns that were found throughout the years. Just copy and paste the RLE encoding of a pattern after the hash (#) in the URL and you'll see it on the screen.</p>
+
+        <div id="footer">
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/andersonvom">andersonvom</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
       </section>
 
     </div>
+
+<script type="text/javascript" src="https://raw.github.com/andersonvom/game-of-life/master/processing-1.3.6.min.js" ></script>
+<script type="text/javascript" src="https://raw.github.com/andersonvom/game-of-life/master/rle.js"></script>
+<script type="text/javascript" src="https://raw.github.com/andersonvom/game-of-life/master/game-of-life.js"></script>
+<script type="text/javascript" src="https://raw.github.com/andersonvom/game-of-life/master/controls.js"></script>
+
     <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
