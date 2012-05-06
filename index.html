@@ -177,7 +177,7 @@ String getBoardEncoding()
   return window.location.hash.substring(1);
 }
 
-void rand()  { board.change_speed(0); board.fill_cells(); updateURL(); }
+void rand()  { board.randomize(); updateURL(); }
 void clear() { board.change_speed(0); board.fill_cells(0); updateURL(); }
 void stop()  { board.stop(); updateURL(); }
 void play()  { board.run(); }
