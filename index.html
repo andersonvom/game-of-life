@@ -50,6 +50,7 @@ mouse_start_col = 0;
 mouse_start_row = 0;
 start_status = false;
 board = new Board();
+starting_hash = "";
 
 void setup()
 {
@@ -66,7 +67,8 @@ void setup()
 
 void decode_hash()
 {
-  board.rle_decode(getBoardEncoding());
+  starting_hash = getBoardEncoding();
+  board.rle_decode( starting_hash );
 }
 
 void reset_board(columns, rows)
@@ -184,6 +186,8 @@ void play()  { board.run(); }
 void step()  { board.step(); updateURL(); }
 void speed(spd) { board.change_speed(spd); }
 void center()  { board.center(); updateURL(); }          
+void restart() { board.rle_decode( starting_hash ); updateURL(); }          
+
         </script>
         
         <div id="game_wrapper">
