@@ -107,7 +107,7 @@ void mouseClicked()
 {
   var row = position(mouseY);
   var col = position(mouseX);
-  board.toggle_cell(row+1, col+1);
+  board.toggle_cell(row, col);
   updateURL();
 }
 
