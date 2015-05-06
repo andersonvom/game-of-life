@@ -12,7 +12,7 @@
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
+      <link rel="stylesheet" href="stylesheets/ie.css">
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
@@ -21,15 +21,16 @@
     <meta name="keywords" content="conway, game, life, processing.js, javascript, canvas, html5" />
     <link rel="icon" type="image/png" href="img/glider.png">
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/andersonvom/game-of-life">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/andersonvom/game-of-life/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/andersonvom/game-of-life/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <div id="header">
+      <nav>
+        <li class="fork"><a href="https://github.com/andersonvom/game-of-life">View On GitHub</a></li>
+        <li class="downloads"><a href="https://github.com/andersonvom/game-of-life/zipball/master">ZIP</a></li>
+        <li class="downloads"><a href="https://github.com/andersonvom/game-of-life/tarball/master">TAR</a></li>
+        <li class="title">DOWNLOADS</li>
+      </nav>
+    </div><!-- end header -->
 
     <div class="wrapper">
 
@@ -40,114 +41,137 @@
         </div>
 
         <div id="game_wrapper">
-        <canvas id="game" data-processing-sources="javascripts/game-of-life.pde">
-          <img src="screenshot.png" />
-        </canvas>
+          <canvas id="game" data-processing-sources="javascripts/game-of-life.pde">
+            <img alt="screenshot" src="screenshot.png" />
+          </canvas>
 
-        <br />
+          <br />
 
-        <button id="step"   onclick="step();">Step (T)</button>
-        <button id="play"   onclick="play();">Play (P)</button>
-        <button id="stop"   onclick="stop();">Stop (S)</button>
-        <button id="random" onclick="rand();">Random (R)</button>
-        <button id="cls"    onclick="cls();">Clear (C)</button>
-        <button id="speed_up" onclick="speed(0.2);">Faster (+)</button>
-        <button id="speed_down" onclick="speed(-0.2);">Slower (-)</button>
-        <br />
-        <button id="small"  onclick="size(50,50);">Small (1)</button>
-        <button id="medium" onclick="size(100,75);">Medium (2)</button>
-        <button id="large"  onclick="size(175,90);">Large (3)</button>
-        <br />
-        <button id="center"  onclick="center();">Center</button>
-        <button id="save"  onclick="save();">Save</button>
+          <button id="step"   onclick="step();">Step (T)</button>
+          <button id="play"   onclick="play();">Play (P)</button>
+          <button id="stop"   onclick="stop();">Stop (S)</button>
+          <button id="random" onclick="rand();">Random (R)</button>
+          <button id="cls"    onclick="cls();">Clear (C)</button>
+          <button id="speed_up" onclick="speed(0.2);">Faster (+)</button>
+          <button id="speed_down" onclick="speed(-0.2);">Slower (-)</button>
+          <br />
+          <button id="small"  onclick="size(50,50);">Small (1)</button>
+          <button id="medium" onclick="size(100,75);">Medium (2)</button>
+          <button id="large"  onclick="size(175,90);">Large (3)</button>
+          <br />
+          <button id="center"  onclick="center();">Center</button>
+          <button id="save"  onclick="save();">Save</button>
         </div>
 
         <h3>Welcome to the Game of Life!</h3>
 
-<p>The goal of the Game of Life is to observe the nature evolve! There can be anything from order to chaos, from random to complexity. You interact with the game by creating an initial state and observing how it evolves. Every square can be either dead or alive and they follow very simple rules:</p>
+        <p>
+          The goal of the Game of Life is to observe the nature evolve! There
+          can be anything from order to chaos, from random to complexity. You
+          interact with the game by creating an initial state and observing how
+          it evolves. Every square can be either dead or alive and they follow
+          very simple rules:
+        </p>
 
-<ul>
-<li>Live Square:
+        <ul>
+          <li>Live Square:
 
-<ol>
-<li>If there are two or three live surrounding neighbors, it will stay alive :D</li>
-<li>Any other number of live neighbors will make it perish :(</li>
-</ol>
-</li>
-<li>Dead Square:
+          <ol>
+            <li>If there are two or three live surrounding neighbors, it will stay alive :D</li>
+            <li>Any other number of live neighbors will make it perish :(</li>
+          </ol>
+          </li>
+          <li>Dead Square:
 
-<ol>
-<li>If there are exactly three live surrounding neighbors, it will flourish :D</li>
-<li>Any other number of live neighbors will have no effect :(</li>
-</ol>
-</li>
-</ul><h3>(Very) Brief History</h3>
+          <ol>
+            <li>If there are exactly three live surrounding neighbors, it will flourish :D</li>
+            <li>Any other number of live neighbors will have no effect :(</li>
+          </ol>
+          </li>
+        </ul><h3>(Very) Brief History</h3>
 
-<p>The <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Game of Life</a> is a cellular automaton created by, lo and behold, John Conway in 1970 and the original version is a zero-player game, meaning there is no interaction after setting the initial state, also called <em>seed</em> (although this version is slightly different in which the current state can changed be on the fly). </p>
+        <p>
+          The <a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">Game of Life</a>
+          is a cellular automaton created by, lo and behold, John Conway in
+          1970 and the original version is a zero-player game, meaning there is
+          no interaction after setting the initial state, also called
+          <em>seed</em> (although this version is slightly different in which
+          the current state can changed be on the fly).
+        </p>
 
-<h3>Interesting Patterns</h3>
+        <h3>Interesting Patterns</h3>
 
-<p>Many different types of patterns occur during the evolution of a given state, many of which were discovered without computers, using paper, blackboards, or game boards (this is a nice exercise to try at home). Here are some interesting ones:</p>
+        <p>
+          Many different types of patterns occur during the evolution of a
+          given state, many of which were discovered without computers, using
+          paper, blackboards, or game boards (this is a nice exercise to try at
+          home). Here are some interesting ones:
+        </p>
 
-<h4>Still Lifes</h4>
+        <h4>Still Lifes</h4>
+        <ul>
+          <li><a href="#2o$2o!">Block</a></li>
+          <li><a href="#bo$obo$obo$bo!">Beehive</a></li>
+          <li><a href="#b2o$o2bo$bobo$2bo!">Loaf</a></li>
+          <li><a href="#2o$obo$bo!">Boat</a></li>
+        </ul>
 
-<ul>
-<li><a href="#2o$2o!">Block</a></li>
-<li><a href="#bo$obo$obo$bo!">Beehive</a></li>
-<li><a href="#b2o$o2bo$bobo$2bo!">Loaf</a></li>
-<li><a href="#2o$obo$bo!">Boat</a></li>
-</ul><h4>Oscilators</h4>
+        <h4>Oscilators</h4>
+        <ul>
+          <li><a href="#bo$bo$bo!">Blinker</a></li>
+          <li><a href="#$b3o$3o!">Toad</a></li>
+          <li><a href="#2o$2o$2b2o$2b2o!">Beacon</a></li>
+          <li><a href="#$3b3o3b3o$$bo4bobo4bo$bo4bobo4bo$bo4bobo4bo$3b3o3b3o$$3b3o3b3o$bo4bobo4bo$bo4bobo4bo$bo4bobo4bo$$3b3o3b3o!">Pulsar</a></li>
+        </ul>
 
-<ul>
-<li><a href="#bo$bo$bo!">Blinker</a></li>
-<li><a href="#$b3o$3o!">Toad</a></li>
-<li><a href="#2o$2o$2b2o$2b2o!">Beacon</a></li>
-<li><a href="#$3b3o3b3o$$bo4bobo4bo$bo4bobo4bo$bo4bobo4bo$3b3o3b3o$$3b3o3b3o$bo4bobo4bo$bo4bobo4bo$bo4bobo4bo$$3b3o3b3o!">Pulsar</a></li>
-</ul><h4>Spaceships</h4>
+        <h4>Spaceships</h4>
+        <ul>
+          <li><a href="#bo$2bo$3o!">Glider</a></li>
+          <li><a href="#$b4o$o3bo$4bo$o2bo!">Lightweight Spaceship</a></li>
+          <li><a href="#9bo12b$7bobo12b$6bobo13b$2o3bo2bo11b2o$2o4bobo11b2o$7bobo12b$9bo!">Queen Bee Shuttle</a></li>
+          <li><a href="#12bo11b$12bobo9b$13bobo8b$13bo2bo7b$13bobo8b$12bobo9b$12bo11b$3bo20b$2bobo19b$bo3bo18b$2b3o19b$2o3b2o17b$17b2o3b2o$19b3o2b$18bo3bob$19bobo2b$20bo3b$11bo12b$9bobo12b$8bobo13b$7bo2bo13b$8bobo13b$9bobo12b$11bo!">Queen Bee Loop</a></li>
+          <li><a href="#12bo16b$12b2o14bo$10bob2o5bobo4b2ob$5bo3bo3b3o2bo4bo5b$2o3bo2bo6bobo5b3o2bo$2o3bob2o6bo3bobobo5b$2o3bo10bobo7b2ob$5b2o14bo6bo$7bo12bobo6b$7bo12bobo6b$5b2o14bo6bo$2o3bo10bobo7b2ob$2o3bob2o6bo3bobobo5b$2o3bo2bo6bobo5b3o2bo$5bo3bo3b3o2bo4bo5b$10bob2o5bobo4b2ob$12b2o14bo$12bo!">Dragon</a></li>
+          <li><a href="#24bo$22bobo$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o$2o8bo3bob2o4bobo$10bo5bo7bo$11bo3bo$12b2o!">Gosper Glider Gun</a></li>
+        </ul>
 
-<ul>
-<li><a href="#bo$2bo$3o!">Glider</a></li>
-<li><a href="#$b4o$o3bo$4bo$o2bo!">Lightweight Spaceship</a></li>
-<li><a href="#9bo12b$7bobo12b$6bobo13b$2o3bo2bo11b2o$2o4bobo11b2o$7bobo12b$9bo!">Queen Bee Shuttle</a></li>
-<li><a href="#12bo11b$12bobo9b$13bobo8b$13bo2bo7b$13bobo8b$12bobo9b$12bo11b$3bo20b$2bobo19b$bo3bo18b$2b3o19b$2o3b2o17b$17b2o3b2o$19b3o2b$18bo3bob$19bobo2b$20bo3b$11bo12b$9bobo12b$8bobo13b$7bo2bo13b$8bobo13b$9bobo12b$11bo!">Queen Bee Loop</a></li>
-<li><a href="#12bo16b$12b2o14bo$10bob2o5bobo4b2ob$5bo3bo3b3o2bo4bo5b$2o3bo2bo6bobo5b3o2bo$2o3bob2o6bo3bobobo5b$2o3bo10bobo7b2ob$5b2o14bo6bo$7bo12bobo6b$7bo12bobo6b$5b2o14bo6bo$2o3bo10bobo7b2ob$2o3bob2o6bo3bobobo5b$2o3bo2bo6bobo5b3o2bo$5bo3bo3b3o2bo4bo5b$10bob2o5bobo4b2ob$12b2o14bo$12bo!">Dragon</a></li>
-<li><a href="#24bo$22bobo$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o$2o8bo3bob2o4bobo$10bo5bo7bo$11bo3bo$12b2o!">Gosper Glider Gun</a></li>
-</ul><h4>Methuselahs</h4>
+        <h4>Methuselahs</h4>
+        <ul>
+          <li><a href="#b2o$2o$bo!">F-pentomino</a></li>
+          <li><a href="#bo$3bo$2o2b3o!">Acorn</a></li>
+        </ul>
 
-
-<ul>
-<li><a href="#b2o$2o$bo!">F-pentomino</a></li>
-<li><a href="#bo$3bo$2o2b3o!">Acorn</a></li>
-</ul><h4>Other Patterns</h4>
-
-<p><a href="http://www.conwaylife.com/wiki/">LifeWiki</a> has tons of other patterns that were found throughout the years. Just copy and paste the RLE encoding of a pattern after the hash (#) in the URL and you'll see it on the screen.</p>
+        <h4>Other Patterns</h4>
+        <p>
+          <a href="http://www.conwaylife.com/wiki/">LifeWiki</a> has tons of
+          other patterns that were found throughout the years. Just copy and
+          paste the RLE encoding of a pattern after the hash (#) in the URL and
+          you'll see it on the screen.
+        </p>
 
         <div id="footer">
           <hr>
           <span class="credits left">Project maintained by <a href="https://github.com/andersonvom">andersonvom</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
         </div>
-
       </section>
 
     </div>
 
-<script type="text/javascript" src="javascripts/processing-1.3.6.min.js" ></script>
-<script type="text/javascript" src="javascripts/rle.js"></script>
-<script type="text/javascript" src="javascripts/game-of-life.js"></script>
-<script type="text/javascript" src="javascripts/controls.js"></script>
+    <script type="text/javascript" src="javascripts/processing-1.3.6.min.js" ></script>
+    <script type="text/javascript" src="javascripts/rle.js"></script>
+    <script type="text/javascript" src="javascripts/game-of-life.js"></script>
+    <script type="text/javascript" src="javascripts/controls.js"></script>
 
     <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-31347952-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+          var pageTracker = _gat._getTracker("UA-31347952-1");
+          pageTracker._trackPageview();
+        } catch(err) {}
+    </script>
   </body>
 </html>
