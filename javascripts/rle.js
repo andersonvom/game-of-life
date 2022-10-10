@@ -35,7 +35,7 @@ function RLE()
   this.parse_line = function(line)
   {
     var states = [];
-    var items = line.match(/([0-9]*(b|o)|[$!])/g);
+    var items = line.match(/([0-9]*(b|o|\$)|!)/g);
     
     for (var i in items)
     {
